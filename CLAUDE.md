@@ -70,4 +70,7 @@ diary. Every stub's name begins `stub:` and the health view surfaces it.
 
 ## Corrections
 
-_(empty)_
+- `db.ts` and `queue.ts` were first written into the client template, then moved here.
+  They are generic infrastructure every client needs identically, and duplicating them per
+  client repo is the thing the shared core exists to prevent. If something looks
+  client-specific, check whether it actually is before copying it.

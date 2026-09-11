@@ -13,5 +13,7 @@ export * from './core/agent.js';
 export * from './core/manager.js';
 export * from './core/cmo.js';
 export { log } from './core/logger.js';
+export * from './core/db.js';
+export * from './core/queue.js';
 export * from './adapters/index.js';
 export * from './voice/index.js';

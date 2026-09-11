@@ -1,6 +1,6 @@
 {
   "name": "@meridian/agent-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "The shared core every Meridian client system is built on. CMO to Manager to Agent, the voice chain, and the integration adapters. Consumed by version tag, so a fix lands once and each client bumps.",
@@ -10,7 +10,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./adapters": "./src/adapters/index.ts",
-    "./voice": "./src/voice/index.ts"
+    "./voice": "./src/voice/index.ts",
+    "./db": "./src/core/db.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

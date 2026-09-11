@@ -251,3 +251,18 @@ test('an unrouted intent escalates rather than being swallowed', async () => {
   assert.equal(out.status, 'escalate');
   assert.equal(out.agent, null);
 });
+
+// ---------------------------------------------------------------------------
+// Job failures must reach somebody
+// ---------------------------------------------------------------------------
+
+test('a job that exhausts its retries has somewhere to report to', async () => {
+  // The core has no events table of its own, so the reporter is registered by
+  // the consumer. A job failing with nobody listening is exactly the silent
+  // failure this whole system exists to avoid.
+  const { onJobFailure, hasFailureReporter } = await import('../queue.js');
+  assert.equal(hasFailureReporter(), false, 'nothing is registered by default');
+
+  onJobFailure(async () => {});
+  assert.equal(hasFailureReporter(), true, 'and a consumer can register one');
+});
