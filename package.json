@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.117.1",
+    "googleapis": "^180.0.0",
     "pg": "^8.13.1",
     "pino": "^9.5.0",
     "pino-pretty": "^13.1.3",
