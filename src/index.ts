@@ -12,6 +12,7 @@ export * from './core/context.js';
 export * from './core/agent.js';
 export * from './core/manager.js';
 export * from './core/cmo.js';
+export * from './core/resolver.js';
 export { log } from './core/logger.js';
 export * from './core/db.js';
 export * from './core/queue.js';
