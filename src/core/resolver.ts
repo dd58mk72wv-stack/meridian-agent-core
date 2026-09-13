@@ -136,6 +136,16 @@ export interface ResolverOptions {
   apiKey?: string;
   /** Returned intents whose name is not registered. Exposed for monitoring. */
   onUnknownIntent?: (name: string) => void;
+  /**
+   * Called when resolution failed rather than simply found nothing.
+   *
+   * Both outcomes return an empty intent list, and they must: a resolver that
+   * guessed because its network was down would be worse. But they are not the
+   * same event. "Nothing here to route" is a normal Tuesday. "The model could
+   * not be reached" is an outage, and it looked identical from outside until
+   * this existed.
+   */
+  onError?: (stage: 'no-key' | 'refused' | 'failed', detail: string) => void;
 }
 
 /**
@@ -164,6 +174,7 @@ export function llmResolver(opts: ResolverOptions): IntentResolver {
       if (!(opts.apiKey ?? process.env['ANTHROPIC_API_KEY'])) {
         log.warn({ correlationId: ctx.correlationId },
           'no ANTHROPIC_API_KEY — every trigger will go to a human');
+        opts.onError?.('no-key', 'ANTHROPIC_API_KEY is not set on this service');
         return [];
       }
 
@@ -188,6 +199,7 @@ export function llmResolver(opts: ResolverOptions): IntentResolver {
         if (response.stop_reason === 'refusal') {
           log.warn({ correlationId: ctx.correlationId },
             'the model refused to route this trigger — sending it to a human');
+          opts.onError?.('refused', 'the model declined to answer');
           return [];
         }
 
@@ -215,6 +227,7 @@ export function llmResolver(opts: ResolverOptions): IntentResolver {
         // outcome than a route chosen on the strength of a failed call.
         log.error({ err, correlationId: ctx.correlationId },
           'intent resolution failed — sending this trigger to a human');
+        opts.onError?.('failed', (err as Error).message);
         return [];
       }
     },
