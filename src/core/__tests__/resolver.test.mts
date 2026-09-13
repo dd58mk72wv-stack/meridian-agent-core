@@ -21,7 +21,11 @@ import { CONFIDENCE_FLOOR } from '../cmo.js';
 
 const agent = (name: string, department: string, handles: string[]) => ({
   name, department, handles,
-  run: async () => ({ ok: true, summary: 'did nothing' }),
+  does: `handles ${handles.join(' and ')}`,
+  // These fixtures never run; the resolver only ever reads name/handles to
+  // build the catalogue. `reasons: false` is the honest value for a stub.
+  reasons: false,
+  run: async () => ({ status: 'done' as const, summary: 'did nothing' }),
 });
 
 const managers = () => [
